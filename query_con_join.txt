@@ -11,8 +11,6 @@ JOIN `departments` AS `dep`
 ON `deg`.department_id = `dep`.id 
 WHERE `dep`.name = "Dipartimento di Neuroscienze"
 
-
-
 3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
 SELECT courses.name, course_teacher.teacher_id, teachers.name, teachers.surname
 FROM courses
@@ -45,7 +43,7 @@ JOIN teachers AS t
 ON ct.teacher_id = t.id
 
 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
-SELECT t.name AS "nome_insegnante", t.surname AS "cognome_insegnante", db.name AS "dipartimento"
+SELECT DISTINCT t.name AS "nome_insegnante", t.surname AS "cognome_insegnante", db.name AS "dipartimento"
 FROM teachers AS t
 JOIN course_teacher AS ct
 ON t.id = ct.teacher_id
@@ -59,5 +57,18 @@ WHERE db.name = "Dipartimento di Matematica"
 
 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per
 superare ciascuno dei suoi esami
+SELECT s.id, s.name, s.surname, COUNT(es.vote) AS 'tentativi_esame', c.name
+FROM students AS s
+JOIN exam_student AS es
+ON s.id = es.student_id
+JOIN exams AS e
+ON es.exam_id = e.id
+JOIN courses AS c
+ON c.id = e.course_id
+GROUP BY s.id, c.id
+ORDER BY s.id ASC
+
+
+
 
 
